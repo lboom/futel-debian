@@ -1,0 +1,24 @@
+---
+# perform dist-upgrade
+# NOTE: this *may* become unsafe
+- name: upgrade packages
+  apt:
+    upgrade: dist
+
+# package list has been reduced as debian comes with most and some are
+# just not needed
+- name: install apt packages
+  apt:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - git
+    - strace
+    - ltrace
+    - tcpdump
+    - festival
+    - logwatch
+    - vim
+    - emacs-nox
+    - curl
+    - mpg123

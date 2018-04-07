@@ -1,0 +1,7 @@
+---
+- hosts: dev
+  become: true
+  tasks:
+    - include: packages.yml
+    - include: asterisk_setup.yml
+    - include: users.yml

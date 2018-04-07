@@ -1,0 +1,4 @@
+asteriskserver/conf
+asteriskserver/.vagrant
+*.box
+*.retry

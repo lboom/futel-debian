@@ -1,0 +1,31 @@
+---
+# user setup
+- name: futel user setup
+  user:
+    name: futel
+    append: yes
+    groups: asterisk
+- name: authorized_keys futel user
+  authorized_key:
+    user: futel
+    key: "{{ item }}"
+    exclusive: yes
+  with_file:
+    - src/id_rsa.pub
+- name: nopasswd sudo futel user
+  copy:
+    src: src/futel.sudo
+    dest: /etc/sudoers.d/futel
+    mode: "u=r"
+- name: backup user
+  user:
+    name: backup
+    append: yes
+    groups: asterisk
+- name: authorized_keys backup user
+  authorized_key:
+    user: backup
+    key: "{{ item }}"
+    exclusive: yes
+  with_file:
+    - src/backup_id_rsa.pub
