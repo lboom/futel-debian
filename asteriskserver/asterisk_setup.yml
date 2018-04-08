@@ -1,6 +1,0 @@
----
-# install and configure asterisk
-- name: install asterisk 13 from apt
-  apt:
-    name: asterisk
-    state: present

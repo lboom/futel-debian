@@ -1,0 +1,68 @@
+---
+# for now only build dev
+- name: load dev secrets
+  include_vars: "update_asterisk_secrets_dev.yml"
+  no_log: true
+- name: load generic secrets
+  include_vars: "update_asterisk_secrets_generic.yml"
+  nolog: true
+# XXX trying out full obliteration
+# perhaps just do this is onestep?
+- name: delete default asterisk conf
+  file:
+    path: /etc/asterisk
+    state: absent
+- name: recreate empty asterisk dir
+  file:
+    path: /etc/asterisk
+    state: present
+    owner: asterisk
+    group: asterisk
+#- name: delete default asterisk conf
+#  file:
+#    path: "{{ item }}"
+#    state: absent
+#  with_items:
+#    # XXX there are additional files to remove
+#    # why are we not just clearing the entire conf dir?
+#    - /etc/asterisk/adsi.conf
+#    - /etc/asterisk/app_skel.conf
+#    - /etc/asterisk/asterisk.adsi
+#    - /etc/asterisk/calendar.conf
+#    - /etc/asterisk/ccss.conf
+#    - /etc/asterisk/cdr_odbc.conf
+#    - /etc/asterisk/cdr_pgsql.conf
+#    - /etc/asterisk/cdr_sqlite3_custom.conf
+#    - /etc/asterisk/cdr_tds.conf
+#    - /etc/asterisk/cel_odbc.conf
+#    - /etc/asterisk/cel_pgsql.conf
+#    - /etc/asterisk/cel_sqlite3_custom.conf
+#    - /etc/asterisk/cel_tds.conf
+#    - /etc/asterisk/config_test.conf
+#    - /etc/asterisk/dnsmgr.conf
+#    - /etc/asterisk/dsp.conf
+#    - /etc/asterisk/extconfig.conf
+#    - /etc/asterisk/extensions.ael
+#    - /etc/asterisk/extensions.lua
+#    - /etc/asterisk/extensions_minivm.conf
+#    - /etc/asterisk/func_odbc.conf
+#    - /etc/asterisk/http.conf
+#    - /etc/asterisk/jabber.conf
+#    - /etc/asterisk/jingle.conf
+#    - /etc/asterisk/minivm.conf
+#    - /etc/asterisk/ooh323.conf
+#    - /etc/asterisk/osp.conf
+#    - /etc/asterisk/queuerules.conf
+#    - /etc/asterisk/res_config_mysql.conf
+#    - /etc/asterisk/res_config_sqlite3.conf
+#    - /etc/asterisk/res_config_sqlite.conf
+#    - /etc/asterisk/res_corosync.conf
+#    - /etc/asterisk/res_pgsql.conf
+#    - /etc/asterisk/res_pktccops.conf
+#    - /etc/asterisk/res_snmp.conf
+#    - /etc/asterisk/sla.conf
+#    - /etc/asterisk/smdi.conf
+#    - /etc/asterisk/telcordia-1.adsi
+#    - /etc/asterisk/users.conf
+#    - /etc/asterisk/vpb.conf
+#    - /etc/asterisk/xmpp.conf

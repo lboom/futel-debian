@@ -1,0 +1,11 @@
+---
+# install and configure asterisk
+- name: install asterisk 13 from apt
+  apt:
+    name: asterisk
+    state: present
+# stopping service before deploying new conf
+- name: stop asterisk service
+  systemd:
+    state: stopped
+    name: asterisk
