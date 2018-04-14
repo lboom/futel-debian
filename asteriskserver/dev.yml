@@ -1,7 +1,0 @@
----
-- hosts: dev
-  become: true
-  tasks:
-    - include: packages.yml
-    - include: install_asterisk.yml
-    - include: users.yml

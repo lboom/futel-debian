@@ -1,13 +1,14 @@
-# build futelasterisk server Debian 9
+# build futel asterisk server Debian 9
 Vagrant.configure("2") do |config|
-	config.vm.define "dev"
+	config.vm.define "virtualbox"
 	# NOTE: contrib has host vbox tools installed
   config.vm.box = "debian/contrib-stretch64"
 	config.vm.synced_folder ".", "/shared",
 		:mount_options => ["dmode=777,fmode=777"]
 	
-	config.vm.provision "dev", type: "ansible" do |ansible|
-		ansible.playbook = "dev.yml"
+	config.vm.provision "virtualbox", type: "ansible" do |ansible|
+		ansible.playbook = "virtualbox.yml"
+		ansible.vault_password_file = "conf/vault_pass.txt"
 	end
 
 	config.vm.provider :virtualbox do |vb|

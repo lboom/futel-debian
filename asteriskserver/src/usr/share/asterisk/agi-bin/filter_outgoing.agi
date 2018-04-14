@@ -1,0 +1,79 @@
+#!/usr/bin/env python
+"""
+Perform actions to filter a number before an outgoing call is allowed,
+for example by hanging up or doing nothing.
+"""
+
+import sys
+from asterisk import *
+import util
+
+agi = agi.AGI()
+
+config_filename = 'blocklist.yaml'
+
+# prefixes of expensive numbers
+premium_nampa_prefixes = [
+    '1900',
+    '1976',
+    '1242',
+    '1246',
+    '1264',
+    '1268',
+    '1284',
+    '1345',
+    '1441',
+    '1473',
+    '1649',
+    '1664',
+    '1721',
+    '1758',
+    '1767',
+    '1784',
+    '1809',
+    '1829',
+    '1849',
+    '1868',
+    '1869',
+    '1876']
+
+# prefixes of numbers which providers will fail
+invalid_prefixes = ['1911']
+
+def filter_blocklist(blocklist, number, extension):
+    """Return True if number and extension are in blocklist."""
+    return any(
+        all([str(block_map.get('number')) == number,
+             str(block_map.get('extension')) == extension])
+        for block_map in blocklist)
+
+def filter_prefix(prefixes, number):
+    """Return True if prefix of number is in prefixes."""
+    return any(number.startswith(prefix) for prefix in prefixes)
+
+def filter_outgoing(blocklist, number, extension):
+    """
+    Perform filtering actions, if any, based on number and extension.
+    """
+    if number == '911':
+        return                  # survive
+    if number == '933':         # callcentric 911 test number
+        return                  # survive
+    if filter_prefix(premium_nampa_prefixes, number):
+        util.metric(agi, 'filter-outgoing-premium')
+        agi.hangup()
+    if filter_prefix(invalid_prefixes, number):
+        util.metric(agi, 'filter-outgoing-invalid')
+        agi.hangup()
+    if filter_blocklist(blocklist, number, extension):
+        util.metric(agi, 'filter-outgoing-blocked')
+        agi.hangup()
+
+def main():
+    number = sys.argv[1]
+    extension = util.calling_extension(agi)
+    blocklist = util.read_config(config_filename)
+    filter_outgoing(blocklist, number, extension)
+
+agi.answer()
+util.agi_tracebacker(agi, main)

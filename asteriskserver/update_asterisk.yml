@@ -1,13 +1,11 @@
 ---
-# for now only build dev
-- name: load dev secrets
-  include_vars: "update_asterisk_secrets_dev.yml"
-  no_log: true
+# for now only build virtualbox
+- name: load vbox secrets
+  include_vars: "update_asterisk_secrets_virtualbox.yml"
+  no_log: false
 - name: load generic secrets
   include_vars: "update_asterisk_secrets_generic.yml"
-  nolog: true
-# XXX trying out full obliteration
-# perhaps just do this is onestep?
+  no_log: true
 - name: delete default asterisk conf
   file:
     path: /etc/asterisk
@@ -15,54 +13,59 @@
 - name: recreate empty asterisk dir
   file:
     path: /etc/asterisk
-    state: present
+    state: directory
     owner: asterisk
     group: asterisk
-#- name: delete default asterisk conf
-#  file:
-#    path: "{{ item }}"
-#    state: absent
-#  with_items:
-#    # XXX there are additional files to remove
-#    # why are we not just clearing the entire conf dir?
-#    - /etc/asterisk/adsi.conf
-#    - /etc/asterisk/app_skel.conf
-#    - /etc/asterisk/asterisk.adsi
-#    - /etc/asterisk/calendar.conf
-#    - /etc/asterisk/ccss.conf
-#    - /etc/asterisk/cdr_odbc.conf
-#    - /etc/asterisk/cdr_pgsql.conf
-#    - /etc/asterisk/cdr_sqlite3_custom.conf
-#    - /etc/asterisk/cdr_tds.conf
-#    - /etc/asterisk/cel_odbc.conf
-#    - /etc/asterisk/cel_pgsql.conf
-#    - /etc/asterisk/cel_sqlite3_custom.conf
-#    - /etc/asterisk/cel_tds.conf
-#    - /etc/asterisk/config_test.conf
-#    - /etc/asterisk/dnsmgr.conf
-#    - /etc/asterisk/dsp.conf
-#    - /etc/asterisk/extconfig.conf
-#    - /etc/asterisk/extensions.ael
-#    - /etc/asterisk/extensions.lua
-#    - /etc/asterisk/extensions_minivm.conf
-#    - /etc/asterisk/func_odbc.conf
-#    - /etc/asterisk/http.conf
-#    - /etc/asterisk/jabber.conf
-#    - /etc/asterisk/jingle.conf
-#    - /etc/asterisk/minivm.conf
-#    - /etc/asterisk/ooh323.conf
-#    - /etc/asterisk/osp.conf
-#    - /etc/asterisk/queuerules.conf
-#    - /etc/asterisk/res_config_mysql.conf
-#    - /etc/asterisk/res_config_sqlite3.conf
-#    - /etc/asterisk/res_config_sqlite.conf
-#    - /etc/asterisk/res_corosync.conf
-#    - /etc/asterisk/res_pgsql.conf
-#    - /etc/asterisk/res_pktccops.conf
-#    - /etc/asterisk/res_snmp.conf
-#    - /etc/asterisk/sla.conf
-#    - /etc/asterisk/smdi.conf
-#    - /etc/asterisk/telcordia-1.adsi
-#    - /etc/asterisk/users.conf
-#    - /etc/asterisk/vpb.conf
-#    - /etc/asterisk/xmpp.conf
+- name: copy asterisk conf
+  copy:
+    src: src/etc/asterisk/
+    dest: /etc/asterisk
+    owner: asterisk
+    group: asterisk
+- name: copy voip provider conf with secrets
+  template:
+    src: src/etc/asterisk/sip_callcentric.conf.j2
+    dest: /etc/asterisk/sip_callcentric.conf
+    owner: asterisk
+    group: asterisk
+- name: copy sip conf with secrets
+  template:
+    src: src/etc/asterisk/sip_secret.conf.j2
+    dest: /etc/asterisk/sip_secret.conf
+    owner: asterisk
+    group: asterisk
+- name: copy dialplan conf with secrets
+  template:
+    src: src/etc/asterisk/extensions_secret.conf.j2
+    dest: /etc/asterisk/extensions_secret.conf
+    owner: asterisk
+    group: asterisk
+- name: copy followme conf with secrets
+  template:
+    src: src/etc/asterisk/followme_secret.conf.j2
+    dest: /etc/asterisk/folowme_secret.conf
+    owner: asterisk
+    group: asterisk
+- name: copy blocklist conf with secrets
+  template:
+    src: src/etc/asterisk/blocklist.yaml.j2
+    dest: /etc/asterisk/blocklist.yaml
+    owner: asterisk
+    group: asterisk
+# are we using the manager interface for anything? I recall a toorcamp
+# use...
+- name: copy manager conf with secrets
+  template:
+    src: src/manager.conf.j2
+    dest: /etc/asterisk/manager.conf
+- name: copy asterisk scripts
+  copy:
+    src: src/usr/share/asterisk/agi-bin/
+    dest: /usr/share/asterisk/agi-bin
+    owner: asterisk
+    group: asterisk
+- name: make asterisk scripts executable
+  file:
+    path: /usr/share/asterisk/agi-bin/
+    mode: "u+x"
+    recurse: yes

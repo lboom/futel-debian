@@ -1,0 +1,96 @@
+---
+- name: copy asterisk robotron sounds
+  copy:
+    src: src/usr/share/asterisk/sounds/futel/robotron
+    dest: /usr/share/asterisk/sounds/futel
+    owner: asterisk
+    group: asterisk
+- name: copy asterisk long oracle sounds
+  copy:
+    src: src/usr/share/asterisk/sounds/futel/oracle-dead-interstitial-long
+    dest: /usr/share/asterisk/sounds/futel
+    owner: asterisk
+    group: asterisk
+- name: copy asterisk short oracle sounds
+  copy:
+    src: src/usr/share/asterisk/sounds/futel/oracle-dead-interstitial-short
+    dest: /usr/share/asterisk/sounds/futel
+    owner: asterisk
+    group: asterisk
+- name: copy asterisk oracle oracle sounds
+  copy:
+    src: src/usr/share/asterisk/sounds/futel/oracle-dead-oracle
+    dest: /usr/share/asterisk/sounds/futel
+    owner: asterisk
+    group: asterisk
+- name: make recordings directory
+  file:
+    path: /usr/share/asterisk/sounds/futel/recordings
+    state: directory
+    owner: asterisk
+    group: asterisk
+- name: copy asterisk statement sounds
+  copy:
+    src: src/usr/share/asterisk/sounds/futel/recordings/karl-oracle-dead
+    dest: /usr/share/asterisk/sounds/futel/recordings
+    owner: asterisk
+    group: asterisk
+- name: copy asterisk statement sounds
+  copy:
+    src: src/usr/share/asterisk/sounds/futel/recordings/karl_quuux
+    dest: /usr/share/asterisk/sounds/futel/recordings
+    owner: asterisk
+    group: asterisk
+- name: copy asterisk statement sounds
+  copy:
+    src: src/usr/share/asterisk/sounds/futel/recordings/karl-robotron
+    dest: /usr/share/asterisk/sounds/futel/recordings
+    owner: asterisk
+    group: asterisk
+- name: copy asterisk statement sounds
+  copy:
+    src: src/usr/share/asterisk/sounds/futel/recordings/karl-voicemail-ivr
+    dest: /usr/share/asterisk/sounds/futel/recordings
+    owner: asterisk
+    group: asterisk
+- name: copy asterisk statement sounds
+  copy:
+    src: src/usr/share/asterisk/sounds/futel/recordings/karl-wildcard-line
+    dest: /usr/share/asterisk/sounds/futel/recordings
+    owner: asterisk
+    group: asterisk
+- name: copy asterisk statement sounds
+  copy:
+    src: src/usr/share/asterisk/sounds/futel/recordings/tishbite
+    dest: /usr/share/asterisk/sounds/futel/recordings
+    owner: asterisk
+    group: asterisk
+- name: copy asterisk wildcard line sounds
+  copy:
+    src: src/usr/share/asterisk/sounds/futel/wildcard-line
+    dest: /usr/share/asterisk/sounds/futel
+    owner: asterisk
+    group: asterisk
+- name: copy asterisk confbridge menu sounds
+  copy:
+    src: src/usr/share/asterisk/sounds/en/futelconf/
+    dest: /usr/share/asterisk/sounds/en/futelconf
+    owner: asterisk
+    group: asterisk
+- name: copy asterisk hold music
+  copy:
+    src: src/usr/share/asterisk/moh/hold/
+    dest: /usr/share/asterisk/moh/hold
+    owner: asterisk
+    group: asterisk
+- name: copy operator hold music
+  copy:
+    src: src/usr/share/asterisk/moh/operator/
+    dest: /usr/share/asterisk/moh/operator
+    owner: asterisk
+    group: asterisk
+# XXX not sure this really belongs here
+- name: start asterisk post update
+  systemd:
+    state: started
+    name: asterisk

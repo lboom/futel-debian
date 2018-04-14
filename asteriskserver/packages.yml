@@ -7,6 +7,7 @@
 
 # package list has been reduced as debian comes with most and some are
 # just not needed
+# TODO: for sanitys sake maybe split out packages by use
 - name: install apt packages
   apt:
     name: "{{ item }}"
@@ -22,3 +23,6 @@
     - emacs-nox
     - curl
     - mpg123
+    - net-tools
+    - python-pyst
+    - python-yaml

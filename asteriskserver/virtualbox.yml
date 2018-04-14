@@ -1,0 +1,9 @@
+---
+- hosts: virtualbox
+  become: true
+  tasks:
+    - include: packages.yml
+    - include: install_asterisk.yml
+    - include: users.yml
+    - include: update_asterisk.yml
+    - include: update_asterisk_sounds.yml
