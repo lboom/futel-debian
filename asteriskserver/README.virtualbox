@@ -1,0 +1,18 @@
+## Deploy a futel asterisk server on 64-bit Debian
+
+## Set up vagrant:
+install:
+	- vagrant
+	- virtualbox
+	- ansible
+# NOTE: currently using a vagrantbox with vb guest tools installed
+Optional: vagrant plugin install vagrant-vbguest
+
+## Deploy to virtualbox with vagrant:
+# NOTE: Debian node currently does not require a reboot after build
+vagrant up
+
+# NOTE: this does not yet work
+# shortcut: update asterisk conf and scripts or already built box
+# this assumes everything you want to do is in update_asterisk.yml
+vagrant provision --provision-with update_asterisk
